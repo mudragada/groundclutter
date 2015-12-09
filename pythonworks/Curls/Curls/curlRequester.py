@@ -1,5 +1,3 @@
-__author__ = 'Krishna Mudragada'
-
 import urllib2
 
 dyn_admin_url_constant = '/dyn/admin/nucleus/'
