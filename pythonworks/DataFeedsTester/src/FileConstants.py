@@ -1,3 +1,3 @@
 class FileConstants:
     feedDictionary = {
-        'colorLevel': ['Products.txt']}
+        'performics': ['AE_Products.txt']}
