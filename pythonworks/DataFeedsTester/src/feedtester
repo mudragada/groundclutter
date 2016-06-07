@@ -1,0 +1,7 @@
+#! /usr/bin/env python3
+import sys
+
+from CurlCallee import main
+
+
+sys.exit(main())
