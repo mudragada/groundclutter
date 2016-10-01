@@ -1,4 +1,12 @@
-__author__ = 'v-mudrak-8l'
+class DynAdminConstants:
+    userName = "krishnam"
+    password = "Eagles*123"
+    statsHost = "svwddprdsts01"
+    instancesFile = "instancesspreadout"
+    instancesFileLocation = "/u01/flush/"
+    nucleusBasePath = '/dyn/admin/nucleus/'
+    heapStatsPath = 'VMSystem'
+
 
 class HTTPConstants:
     responseCodeDictionary = {  '100'   :   'CONTINUE',
@@ -51,4 +59,4 @@ class HTTPConstants:
                                 '507'	:   'INSUFFICIENT_STORAGE',
                                 '510'	:   'NOT_EXTENDED'
     }
-    headerList = {}
+

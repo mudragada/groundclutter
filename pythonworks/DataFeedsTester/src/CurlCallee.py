@@ -1,11 +1,9 @@
-import logging, re, os, fnmatch, requests
+import logging, re, os, fnmatch, requests, socket, gzip, shutil, paramiko, mimetypes
 
-from requests   import exceptions
+from Constants import FileConstants
+from Constants import HTTPConstants
 
-from FileConstants import FileConstants
-from HTTPConstants import HTTPConstants
-
-
+## static main method
 def main():
     try:
         calleeObj = CurlCallee()
@@ -13,13 +11,21 @@ def main():
     except KeyboardInterrupt:
         logging.info("Program exited by user")
 
+
+def setLoggingPrefs():
+        logging.basicConfig(format='%(asctime)s %(message)s')
+        logging.getLogger().setLevel(logging.INFO)
+        logging.getLogger("requests").setLevel(logging.WARNING)
+
+
 class CurlCallee:
     fileConstants = FileConstants()
     httpConstants = HTTPConstants()
-    logging.basicConfig(format='%(asctime)s %(message)s')
-    logging.getLogger().setLevel(logging.INFO)
-    logging.getLogger("requests").setLevel(logging.WARNING)
+
     urls = dict()
+    setLoggingPrefs()
+
+
     def findFile(self, pattern, path):
         result = []
         for root, dirs, files in os.walk(path):
@@ -27,28 +33,39 @@ class CurlCallee:
                 if fnmatch.fnmatch(name, pattern):
                     result.append(os.path.join(root, name))
         return result
+
+
     def gatherUrls(self, urls):
         try:
             for key in self.fileConstants.feedDictionary:
                 urls[key] = []
-                for file in self.fileConstants.feedDictionary.get(key):
-                    result = self.findFile(file, os.path.pardir)
+                for filepattern in self.fileConstants.feedDictionary.get(key):
+                    result = self.findFile(filepattern, os.path.pardir)
                     if result:
                         file = result[0]
                     else:
                         logging.error("Didn't find feed file for " + key)
-                    print("Gathering URLs from " + file + " of type " + key)
-                    with open(file,'r') as fileName:
-                        lines = fileName.read().splitlines()
-                        for line in lines:
-                            lineUrls = re.findall(r'(?:http|https|www)(?:[^\\\]"<>]*)', line)
-                            #lineUrls = re.findall(r'(https?://\S+)', line)
-                            urls[key].append(lineUrls)
-        except FileNotFoundError:
+                    logging.info("Gathering URLs from " + file + " of type " + key)
+                    if("gzip" not in self.determineFileType(file)):
+                        with open(file,'r') as fileName:
+                            self.readUrlsFromFile(fileName, urls, key)
+                    else:
+                        with gzip.open(file, 'rb') as fileName:
+                            self.readUrlsFromFile(fileName, urls, key)
+
+        except IOError:
             logging.error("Check the file names in FileConstants file")
         except UnicodeDecodeError:
             logging.error("Make sure that the file is in UTF-8 format " + file)
 
+    def readUrlsFromFile(self, fileName, urls, key):
+        lines = fileName.read().splitlines()
+        for line in lines:
+            lineUrls = re.findall(r'(?:http|https|www)(?:[^\\\]"<>]*)', line)
+
+            ## replace http: with https:
+            lineUrls = [url.replace('http:', 'https:') for url in lineUrls]
+            urls[key].append(lineUrls)
 
     def printUrls(self, urls):
         counter = 0
@@ -87,7 +104,7 @@ class CurlCallee:
             return self.processedCurlResponse(curlResponse)
         except (requests.exceptions.InvalidSchema):
             return 'INVALID URL'
-        except (requests.exceptions.ConnectionError, ConnectionError):
+        except (requests.exceptions.ConnectionError):
             return 'CONNECTION ERROR'
         except (requests.exceptions.ReadTimeout):
             return 'READTIMEOUT ERROR'
@@ -114,6 +131,77 @@ class CurlCallee:
                 else:
                     # if none of the response codes are matching, return the original status_code itself
                     return respCodeDict.get(status_code)
+
+    def gatherFiles(self):
+        if(socket.gethostname().startswith(self.fileConstants.statsHost)):
+            self.findAndCopyLocalMatchingFiles()
+        else:
+            self.findAndCopyRemoteMatchingFiles()
+
+
+
+    def findAndCopyLocalMatchingFiles(self):
+        logging.info("You're already on " + self.fileConstants.statsHost +", skipping the scp and doing a cp")
+        searchFileResultsDict = dict()
+        ## Fill the searchFileResultsDict with the matching file pattern for each feedtype
+        for key in self.fileConstants.feedDictionary:
+            for filepattern in self.fileConstants.feedDictionary.get(key):
+                searchFileResultsDict.clear()
+                os.chdir(self.fileConstants.feedFilesLocation)
+                for file in os.listdir('.'):
+                    if (fnmatch.fnmatch(file, filepattern)):
+                        searchFileResultsDict[file] = os.lstat(file).st_mtime
+
+                fileToDownload = max(searchFileResultsDict, key=searchFileResultsDict.get)
+                shutil.copyfile(self.fileConstants.feedFilesLocation + fileToDownload, fileToDownload)
+
+
+    def findAndCopyRemoteMatchingFiles(self):
+        logging.info("Sftp'ing the feeds from " + self.fileConstants.feedFilesLocation + " from " + self.fileConstants.statsHost)
+        try:
+            sshClient = paramiko.SSHClient()
+            sshClient.load_system_host_keys()
+            sshClient.connect(self.fileConstants.statsHost)
+            ## 1. Open a new SFTP server on the SSH Connection
+            sftpClient = sshClient.open_sftp()
+            sftpClient.chdir(self.fileConstants.feedFilesLocation)
+            searchFileResultsDict = dict()
+            ## 2. Fill the searchFileResultsDict with the matching file pattern for each feedtype
+            for key in self.fileConstants.feedDictionary:
+                for filepattern in self.fileConstants.feedDictionary.get(key):
+                    searchFileResultsDict.clear()
+                    for file in sftpClient.listdir():
+                        if (fnmatch.fnmatch(file, filepattern)):
+                            searchFileResultsDict[file] = sftpClient.lstat(file).st_mtime
+
+            ## 3. find the file with the latest timestamp
+                    fileToDownload = max(searchFileResultsDict, key=searchFileResultsDict.get)
+                    logging.info("Downloading " + fileToDownload)
+            ## 4. Download the latest file
+                    sftpClient.get(fileToDownload, fileToDownload)
+
+            sshClient.close()
+            sftpClient.close()
+        except (TypeError, paramiko.SSHException, IOError, AttributeError):
+            sftpClient.close()
+            sshClient.close()
+
+    def cleanFiles(self):
+        os.chdir('.')
+        for key in self.fileConstants.feedDictionary:
+            for filepattern in self.fileConstants.feedDictionary.get(key):
+                for file in os.listdir('.'):
+                    if (fnmatch.fnmatch(file, filepattern)):
+                        logging.info("Removing " + file)
+                        os.remove(file)
+
+    def determineFileType(self, filename):
+        type = mimetypes.guess_type(filename)
+        return type
+
     def execute(self):
+        self.gatherFiles()
         self.gatherUrls(self.urls)
+        #self.printUrls(self.urls)
         self.testUrls(self.urls)
+        self.cleanFiles()

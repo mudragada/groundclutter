@@ -1,5 +1,22 @@
 __author__ = 'v-mudrak-8l'
 
+class DynAdminConstants:
+    userName = "krishnam"
+    password = "Eagles#123"
+    statsHost = "svgtcstgsts01"
+    instancesFile = "instancesspreadout"
+    instancesFileLocation = "/u01/flush/"
+    nucleusBasePath = '/dyn/admin/nucleus/'
+    browsePageServiceFlushPath = 'aeo/commerce/catalog/services/BrowsePageService'
+    responseDictionary = {'1': 'cap', '3':'fulfillment', '4':'orderstatus', '5':'lockmanager', '6':'services', '7':'None'}
+    instanceDictionary = {'cap': ['20', '21', '22'],
+                          'fulfillment' : ['70'],
+                          'lockmanager' : ['01'],
+                          'services'    : ['73'],
+                          'orderstatus' : ['72'],
+                          'None' : []}
+
+
 class HTTPConstants:
     responseCodeDictionary = {  '100'   :   'CONTINUE',
                                 '101'   :   'SWITCHING_PROTOCOLS',
@@ -51,4 +68,4 @@ class HTTPConstants:
                                 '507'	:   'INSUFFICIENT_STORAGE',
                                 '510'	:   'NOT_EXTENDED'
     }
-    headerList = {}
+

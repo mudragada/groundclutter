@@ -1,19 +1,43 @@
 __author__ = 'Krishna Mudragada'
 
-import re
-
-import requests
+import re, requests, scp, paramiko, socket, logging, os, shutil, sys
 from requests import exceptions
-from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
-
-from Curls.Curls import HTTPConstants
-from  Curls.dynAdmin.Constants import DynAdminConstants
-
+from bs4 import BeautifulSoup
+from Constants import HTTPConstants
+from Constants import DynAdminConstants
 
 class CurlCallee:
     constants = DynAdminConstants()
     httpConstants = HTTPConstants()
+    logging.basicConfig(format='%(asctime)s %(message)s')
+    logging.getLogger().setLevel(logging.INFO)
+
+    def copyInstancesFileToLocal(self):
+        if(socket.gethostname().startswith(self.constants.statsHost)):
+            logging.info("You're already on " + self.constants.statsHost +", skipping the scp and doing a cp")
+            shutil.copyfile(self.constants.instancesFileLocation + self.constants.instancesFile, self.constants.instancesFile)
+        else:
+            logging.info("SCP'ing the " + self.constants.instancesFile + " from " + self.constants.statsHost + ":" + self.constants.instancesFileLocation)
+            sshClient = paramiko.SSHClient()
+            sshClient.load_system_host_keys()
+            sshClient.connect(self.constants.statsHost)
+            scpClient = scp.SCPClient(sshClient.get_transport())
+            scpClient.get(self.constants.instancesFileLocation + self.constants.instancesFile)
+            scpClient.close()
+            sshClient.close()
+            logging.info("SCPing " + self.constants.instancesFile + " to " + socket.gethostname() + " is COMPLETE")
+
+
+    def checkInstancesFile(self):
+        if(not os.path.isfile(self.constants.instancesFile)):
+            logging.error("Instances file not found. Pls check.")
+            sys.exit()
+        if (os.stat(self.constants.instancesFile).st_size == 0):
+            logging.error("Instances file is empty. Pls check")
+            sys.exit()
+
+
 
     def curlOnFirstSocketFromFile(self,ports,path):
         returnValue = dict()
@@ -74,7 +98,7 @@ class CurlCallee:
                 return curlResponse
             else:
                 return None
-        except (requests.exceptions.ConnectionError, ConnectionError):
+        except (requests.exceptions.ConnectionError):
             print("ERROR:: Connection issues on " + socket)
             return None
 
@@ -141,5 +165,6 @@ class CurlCallee:
 def main():
 
     calleeObj = CurlCallee()
-    calleeObj.invokeMethod(calleeObj.constants.browsePageServiceFlushPath)
+    calleeObj.copyInstancesFileToLocal()
+    #calleeObj.invokeMethod(calleeObj.constants.browsePageServiceFlushPath)
 
