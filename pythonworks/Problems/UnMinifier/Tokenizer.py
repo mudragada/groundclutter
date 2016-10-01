@@ -1,4 +1,4 @@
-__author__ = 'v-mudrak-8l'
+__author__ = 'Krishna Mudragada'
 
 from Constants import JSConstants
 class Tokenizer:

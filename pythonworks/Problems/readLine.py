@@ -1,7 +1,7 @@
-__author__ = 'v-mudrak-8l'
+__author__ = 'Krishna Mudragada'
 
 
-fileDesc = open("/Users/v-mudrak-8l/Desktop/category.page.js")
+fileDesc = open("~/Desktop/category.page.js")
 
 for i, line in enumerate(fileDesc):
     if i == 70:
