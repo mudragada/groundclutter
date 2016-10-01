@@ -1,24 +1,24 @@
 # coding: utf-8
 #
-# #204 Barometer I2C Brick
+# # MPL115A2 Temperature and Pressure sensor
 #
 
 import smbus
 import time
 
-ADDRESS = 0x60
+
+
 CHANNEL = 1
 
-COEF_REQ = 0x04
-COEF_DATA = 0x04
-CONV_REQ = 0x12
-HPA_DATA = 0x00
-
-bus = smbus.SMBus(CHANNEL)
-
 class MPL115A2:
-    def __init__(self, address):
-        self.address = address
+    _I2C_ADDRESS = 0x60
+    COEF_DATA = 0x04
+    COEF_REQ = 0x04
+    CONV_REQ = 0x12
+    HPA_DATA = 0x00
+
+    def __init__(self, bus):
+        self.bus = bus
 
     def conv_coef(self, msb, lsb, total, fractional, zero):
         data = (msb << 8) | lsb
@@ -36,8 +36,8 @@ class MPL115A2:
         return data
 
     def read_coef(self):
-        bus.write_byte_data(self.address, COEF_REQ, 0x01)
-        data = bus.read_i2c_block_data(self.address, COEF_DATA, 12)
+        self.bus.write_byte_data(self._I2C_ADDRESS, self.COEF_REQ, 0x01)
+        data = self.bus.read_i2c_block_data(self._I2C_ADDRESS, self.COEF_DATA, 12)
 
         a0  = self.conv_coef(data[0],  data[1],  16,  3, 0)
         b1  = self.conv_coef(data[2],  data[3],  16, 13, 0)
@@ -49,12 +49,12 @@ class MPL115A2:
         return {"a0": a0, "b1": b1, "b2": b2, "c12": c12, "c11": c11, "c22": c22}
 
     def read_hpa(self,coef):
-        bus.write_byte_data(self.address, CONV_REQ, 0x01)
+        self.bus.write_byte_data(self._I2C_ADDRESS, self.CONV_REQ, 0x01)
 
         time.sleep(0.003)
 
-        bus.write_byte_data(self.address, HPA_DATA, 0x00)
-        adata = bus.read_i2c_block_data(self.address, HPA_DATA, 4)
+        self.bus.write_byte_data(self._I2C_ADDRESS, self.HPA_DATA, 0x00)
+        adata = bus.read_i2c_block_data(self._I2C_ADDRESS, self.HPA_DATA, 4)
 
         padc = self.conv_adc(adata[0], adata[1])
         tadc = self.conv_adc(adata[2], adata[3])
@@ -67,13 +67,15 @@ class MPL115A2:
         return {"hpa": hpa, "temp": temp}
 
 if __name__ == "__main__":
-    mpl = MPL115A2(ADDRESS)
+    try:
+        bus = smbus.SMBus(CHANNEL)
+        with MPL115A2(bus) as mpl115a2:
+            coef = mpl115a2.read_coef()
+            data = mpl115a2.read_hpa(coef)
+            print " hpa = " , ( data['hpa'] )
+            print " temp = " , ( data['temp'] )
 
-    coef = mpl.read_coef()
+    except IOError, e:
+        print e
+        print 'Error creating connection to i2c.'
 
-    while True:
-        data = mpl.read_hpa(coef)
-        print " hpa = " , ( data['hpa'] )
-        print " temp = " , ( data['temp'] )
-        print
-        time.sleep(1)
