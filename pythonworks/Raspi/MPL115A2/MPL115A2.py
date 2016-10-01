@@ -21,6 +21,8 @@ class MPL115A2:
         self.bus = bus
     def __exit__(self, type, value, traceback):
         self.bus.close()
+    def __enter__(self):
+        return self
 
     def conv_coef(self, msb, lsb, total, fractional, zero):
         data = (msb << 8) | lsb
@@ -56,7 +58,7 @@ class MPL115A2:
         time.sleep(0.003)
 
         self.bus.write_byte_data(self._I2C_ADDRESS, self.HPA_DATA, 0x00)
-        adata = bus.read_i2c_block_data(self._I2C_ADDRESS, self.HPA_DATA, 4)
+        adata = self.bus.read_i2c_block_data(self._I2C_ADDRESS, self.HPA_DATA, 4)
 
         padc = self.conv_adc(adata[0], adata[1])
         tadc = self.conv_adc(adata[2], adata[3])
