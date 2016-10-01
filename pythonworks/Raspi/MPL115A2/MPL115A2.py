@@ -19,6 +19,8 @@ class MPL115A2:
 
     def __init__(self, bus):
         self.bus = bus
+    def __exit__(self, type, value, traceback):
+        self.bus.close()
 
     def conv_coef(self, msb, lsb, total, fractional, zero):
         data = (msb << 8) | lsb
