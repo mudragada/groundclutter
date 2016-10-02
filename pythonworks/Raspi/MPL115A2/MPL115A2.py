@@ -36,8 +36,10 @@ class MPL115A2:
 
     def __enter__(self):
         return self
+
     def getTimeStamp(self):
         datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S').replace(":" , "").replace("-","").replace(" ","")
+
     def conv_coef(self, msb, lsb, total, fractional, zero):
         data = (msb << 8) | lsb
         rate = float(1 << 16 - total + fractional + zero)
@@ -46,13 +48,13 @@ class MPL115A2:
             result = float(data / rate)
         else:
             result = -float(((data ^ 0xFFFF) + 1) / rate)
-
         return result
 
     def conv_adc(self, msb, lsb):
         data = ( (msb << 8) | lsb ) >> 6
         return data
-     def pressure(self, times=10):
+
+    def pressure(self, times=10):
         sum = 0
         for run in range(times):
             sum += self.read_pressure()
