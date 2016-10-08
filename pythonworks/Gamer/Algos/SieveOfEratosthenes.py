@@ -1,4 +1,4 @@
-import math
+import math,time
 
 def inputSize():x = input('enter the Problem Size');return int(x)
 def bitArray(probSize): return ([True for i in range(1,probSize+1)])
@@ -34,7 +34,6 @@ def printPrime(probSize):
 def main():
     problemSize = inputSize()
     ## Time Spent
-    import time
     start_time_sieve = time.time()
     printPrimeBySieve(problemSize)
     time_taken_for_sieve = time.time() - start_time_sieve

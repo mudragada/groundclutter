@@ -1,6 +1,6 @@
 __author__ = 'Krishna Mudragada'
 
-import logging
+import logging,time
 class EuclidGCD:
     def __init__(self):
         logging.basicConfig(format='%(asctime)s %(message)s')
@@ -35,4 +35,6 @@ if __name__ == "__main__":
             continue
         gcdObject.addToList(int(number_input))
     gcdObject.printList()
+    start_time = time.time()
     logging.info("GCD of numbers is " + gcdObject.gcdOfList())
+    logging.info("%s seconds taken - "  %(time.time() - start_time))
