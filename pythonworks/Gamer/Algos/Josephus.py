@@ -1,3 +1,4 @@
+# This solution works only for a positive step sizes
 __author__ = 'Krishna Mudragada'
 
 import logging
@@ -16,8 +17,7 @@ class Josephus:
         index=0
         while problemList:
             index = (index + (stepSize)) % len(problemList)
-            sequenceOfDeath.append(problemList[index])
-            problemList.pop(index)
+            sequenceOfDeath.append(problemList.pop(index))
             logging.info("Removing index " + str(index) + "from the list. Now the Size of list is " + str(len(problemList)))
 
         logging.info(sequenceOfDeath)
