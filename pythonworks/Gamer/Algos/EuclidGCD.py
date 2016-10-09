@@ -23,7 +23,7 @@ class EuclidGCD:
     def gcdOfList(self):
         return str(reduce(self.gcd,self.numberList))
 
-if __name__ == "__main__":
+def main():
     gcdObject = EuclidGCD()
     while True:
         number_input = raw_input("Enter number for calculating GCD:")
@@ -38,3 +38,6 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info("GCD of numbers is " + gcdObject.gcdOfList())
     logging.info("%s seconds taken - "  %(time.time() - start_time))
+
+if __name__ == "__main__":
+    main()
