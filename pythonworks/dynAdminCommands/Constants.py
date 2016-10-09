@@ -1,9 +1,6 @@
 __author__ = 'Krishna Mudragada'
 
 class DynAdminConstants:
-    userName = "krishnam"
-    password = "Eagles#123"
-    statsHost = "svgtcstgsts01"
     instancesFile = "instancesspreadout"
     instancesFileLocation = "/u01/flush/"
     nucleusBasePath = '/dyn/admin/nucleus/'
