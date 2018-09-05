@@ -1,16 +1,16 @@
 __author__ = 'Krishna Mudragada'
 
 class DynAdminConstants:
-    instancesFile = "instancesspreadout"
-    instancesFileLocation = "/u01/flush/"
+    instancesFile = "instances"
+    instancesFileLocation = "/flush/"
     nucleusBasePath = '/dyn/admin/nucleus/'
-    browsePageServiceFlushPath = 'aeo/commerce/catalog/services/BrowsePageService'
-    responseDictionary = {'1': 'cap', '3':'fulfillment', '4':'orderstatus', '5':'lockmanager', '6':'services', '7':'None'}
-    instanceDictionary = {'cap': ['20', '21', '22'],
-                          'fulfillment' : ['70'],
-                          'lockmanager' : ['01'],
-                          'services'    : ['73'],
-                          'orderstatus' : ['72'],
+    browsePageServiceFlushPath = 'MyService'
+    responseDictionary = {'1': 'JVM1', '3':'JVM2', '4':'JVM3', '5':'JVM4', '6':'services', '7':'None'}
+    instanceDictionary = {'JVM1': ['20', '21', '22'],
+                          'JVM2' : ['70'],
+                          'JVM3' : ['01'],
+                          'JVM4'    : ['73'],
+                          'JVM5' : ['72'],
                           'None' : []}
 
 

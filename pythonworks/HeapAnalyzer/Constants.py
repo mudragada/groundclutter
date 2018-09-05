@@ -1,9 +1,9 @@
 class DynAdminConstants:
-    userName = "krishnam"
-    password = "Eagles*123"
-    statsHost = "svwddprdsts01"
-    instancesFile = "instancesspreadout"
-    instancesFileLocation = "/u01/flush/"
+    userName = "dumb"
+    password = "dumb"
+    statsHost = "host1"
+    instancesFile = "instances"
+    instancesFileLocation = "/"
     nucleusBasePath = '/dyn/admin/nucleus/'
     heapStatsPath = 'VMSystem'
 

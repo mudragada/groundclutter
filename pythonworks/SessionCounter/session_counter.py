@@ -6,8 +6,8 @@ from io import StringIO
 from lxml.html import fromstring
 
 class DynAdminConstants:
-    instancesFile = '/u01/flush/instancesspreadout'
-    instancesFileLocation = '/u01/flush/'
+    instancesFile = 'instances'
+    instancesFileLocation = '/flush'
     basePath = '/dyn/admin/nucleus/'
     def __init__(self):
         self.dynUserName = raw_input("Enter your username:")
