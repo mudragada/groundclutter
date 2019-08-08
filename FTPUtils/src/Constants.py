@@ -4,7 +4,7 @@ class FileConstants:
     feedDictionary = {
         'feedone' : ['*.xml*'],
         'feedtwo': ['*.json*'],
-        'feedthree': ['*Products*.txt*']}
+        'feedthree': ['*.txt*']}
 
 class HTTPConstants:
     responseCodeDictionary = {  '100'   :   'CONTINUE',
