@@ -9,5 +9,4 @@
     "X-Query-Key" : "ABCDED",
     "histogramBins" : 40,
     "maxBackendDuration" : 5,
-    "NRInsightsAPIUrl" : "https://insights-api.newrelic.com/v1/accounts/YourNumber/query?nrql="
 }
