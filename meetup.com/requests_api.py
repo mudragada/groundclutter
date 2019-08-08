@@ -16,6 +16,7 @@ class requestsApi:
 				headers = {'content-type': 'application/json'}
 				response = requests.get(url, headers=headers, params=parameters,timeout=5)
 				# log(json.dumps(response.json()))
+				## TO DO 200 OK vs 429 Too Many Requests
 				return response.json()
 		except(requests.exceptions.ConnectionError):
 			log("ERROR:: Connection issues")

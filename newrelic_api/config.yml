@@ -1,0 +1,61 @@
+##config.yml
+
+newrelic_accounts: 
+  2130150:
+    name: 'UGP Perf'
+    status: 'Active'
+    api_key: 766f9b043cc65ffa7544831efdf74b3af1e281d23c8a488
+    admin_api_key: 788261e53810a8cf17f071962477d83a
+  # 2145823:
+  #   name: 'AEO Corp - Pre-Production'
+  #   status: 'Inactive'
+  #   api_key: a6962e51b688a55c8a1a34d64c4996c81861f6d26c71cf2
+  #   admin_api_key: cddadffe6f252d77bcd9a83ac44f2594
+  # 2097486:
+  #   name: 'UGP Production'
+  #   status: 'Inactive'
+  #   api_key: fe65a6469a17f549155a480fa592127aced71146fe06817
+  #   admin_api_key: 0059021f42e5958ac2c707065323684f
+  # 358169:
+  #   name: 'AEO Pre-Production'
+  #   status: 'Inactive'
+  #   api_key: 93822ea95fc7682a6ef24513d29c0e1c5392c8ed3068aa0
+  #   admin_api_key: b2817e6c4c2dace5d6293b88aa2683fe
+
+  # 358146:
+  #   name: 'AEO Production'
+  #   status: 'Inactive'
+  #   api_key: 64cb3c8f1c8fee819b6deda4bde98ac4fa797dc5b1b864d
+  #   admin_api_key: 36e30717540f99420a95d0d322eb0d1a
+
+  
+
+applications:
+    url: 'https://api.newrelic.com/v2/applications.json'
+    application:
+      url: 'https://api.newrelic.com/v2/applications/${APP_ID}.json'
+      category:
+        UGP: [CAP, LOCK, SSO, BCC, Prvw, CSC, AUX, APISG, CMS, AGWA, APISG]
+        HTG: [CAP, CSR, Services, CMS, Vertex, Sterling, OAP, Lock, Assembler, Fulfillment, Order Status, BCC]
+        Global: [CHub, CustomerHub, ESB, Jira]
+
+
+insights:
+  url: 'https://insights-api.newrelic.com/v1/accounts/${ACCOUNTID}/query?nrql='
+
+
+metrics:
+  url: 'https://api.newrelic.com/v2/applications/${APPID}/metrics.json'
+  data:
+    url: 'https://api.newrelic.com/v2/applications/${APPID}/metrics/data.json'
+
+alerts:
+  policies:
+    url: 'https://api.newrelic.com/v2/alerts_policies.json'
+  types:
+    apm: 
+      url: 'https://api.newrelic.com/v2/alerts_conditions.json'
+    infra: 
+      url: 'https://infra-api.newrelic.com/v2/alerts/conditions?policy_id={REPLACE_POLICY_ID}'
+
+

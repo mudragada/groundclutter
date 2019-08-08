@@ -1,9 +1,9 @@
 class FileConstants:
-    statsHost = "svcldprdsts01"
-    feedFilesLocation = "/u01/outfiles/"
+    statsHost = "server"
+    feedFilesLocation = "filepath"
     feedDictionary = {
-        'feedone' : ['*PrdFeed*.xml*'],
-        'feedtwo': ['*products_ddi.xml*'],
+        'feedone' : ['*.xml*'],
+        'feedtwo': ['*.json*'],
         'feedthree': ['*Products*.txt*']}
 
 class HTTPConstants:

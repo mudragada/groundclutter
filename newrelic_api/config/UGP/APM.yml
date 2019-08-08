@@ -1,0 +1,94 @@
+## CAP APM.yml
+
+App:
+  condition:
+    type: 'apm_app_metric'
+    condition_scope: 'application'
+    metric: 'apdex'
+    enabled:  True
+    violation_close_timer : 24
+    term:
+      priority: 'critical'
+      operator: 'below'
+      threshold: '0.8'
+      duration: '15'
+      time_function: 'all'
+    term:
+      priority: 'warning'
+      operator: 'below'
+      threshold: '0.9'
+      duration: '15'
+      time_function: 'all'
+ condition:
+    type: 'apm_app_metric'
+    condition_scope: 'application'
+    metric: 'apdex'
+    enabled:  True
+    violation_close_timer : 24
+    term:
+      priority: 'critical'
+      operator: 'below'
+      threshold: '0.8'
+      duration: '15'
+      time_function: 'all'
+    term:
+      priority: 'warning'
+      operator: 'below'
+      threshold: '0.9'
+      duration: '15'
+      time_function: 'all'
+ condition:
+    type: 'apm_app_metric'
+    condition_scope: 'application'
+    metric: 'apdex'
+    enabled:  True
+    violation_close_timer : 24
+    term:
+      priority: 'critical'
+      operator: 'below'
+      threshold: '0.8'
+      duration: '15'
+      time_function: 'all'
+    term:
+      priority: 'warning'
+      operator: 'below'
+      threshold: '0.9'
+      duration: '15'
+      time_function: 'all'
+  condition:
+    type: 'apm_app_metric'
+    condition_scope: 'application'
+    metric: 'apdex'
+    enabled:  True
+    violation_close_timer : 24
+    term:
+      priority: 'critical'
+      operator: 'below'
+      threshold: '0.8'
+      duration: '15'
+      time_function: 'all'
+    term:
+      priority: 'warning'
+      operator: 'below'
+      threshold: '0.9'
+      duration: '15'
+      time_function: 'all'
+ condition:
+    type: 'apm_app_metric'
+    condition_scope: 'application'
+    entities: ['187269061']
+    metric: 'apdex'
+    enabled:  True
+    violation_close_timer : 24
+    term:
+      priority: 'critical'
+      operator: 'below'
+      threshold: '0.8'
+      duration: '15'
+      time_function: 'all'
+    term:
+      priority: 'warning'
+      operator: 'below'
+      threshold: '0.9'
+      duration: '15'
+      time_function: 'all'
