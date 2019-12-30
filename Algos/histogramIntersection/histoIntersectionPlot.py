@@ -1,6 +1,5 @@
 import datetime, json, ast, os.path, numpy as np, pandas as pd, time as ti, matplotlib.pyplot as plt
 from datetime import time, timedelta
-from NRInsightsQuery import NRInsightsQuery
 
 class HistogramIntersection:
 	histoIntersectionDictionary = {}
@@ -21,7 +20,6 @@ class HistogramIntersection:
 
 	def collectData(self):
 		try:
-			NRObj = NRInsightsQuery()
 			if os.path.exists(self.config['filename']):
 				df = pd.read_csv(self.config['filename'])
 			else:
@@ -37,14 +35,7 @@ class HistogramIntersection:
 					if toTime == "24:00:00":
 						toTime = "23:59:59"
 					fromDT =  "'" + fromDay + " " + fromTime + "-0500" +"'"
-					toDT = "'" + fromDay + " " + toTime + "-0500" +"'"
-					query = str(NRObj.getBackendDurationQuery(fromDT, toDT))
-					jsonData = (NRObj.queryInsights(query)).json()
-					for retry in range(self.config['retryLimit']):
-						if 'error' not in jsonData:
-							histoData = jsonData['results'][0]['histogram']
-							break
-					if histoData:
+					toDT = "'" + fromDay + " " + toTime + "-0500" +"'"					if histoData:
 						if fromDay not in df:
 							df.insert(0, fromDay, "")
 						df[fromDay][i] = histoData
