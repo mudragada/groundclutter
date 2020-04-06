@@ -19,7 +19,7 @@
 #Guaranteed constraints:
 #2 ≤ inputArray.length ≤ 10,
 #-1000 ≤ inputArray[i] ≤ 1000.
-#
+
 #[output] integer
 #
 #The largest product of adjacent elements.
@@ -34,7 +34,6 @@ def adjacentElementsProduct(inputArray):
     for i in range(len(inputArray)):
         if(inputArray[i] !=None and inputArray[i-1] !=None and i!=0):
             product = inputArray[i] * inputArray[i-1]
-            print (product)
             if (product > maxProduct):
                 maxProduct = product
         else:
