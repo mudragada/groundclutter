@@ -4,7 +4,7 @@ from os import path
 import operator
 import itertools
 
-log_file_path = "./PyPractice/server.log"
+log_file_path = "server.log"
 log_data = []
 
 pattern = re.compile(r'\[(?P<time>.+)\](\s+\")(?P<requestType>\w+)(\s+)(?P<fileName>.*?)(\sHTTP)\/(?P<httpVersion>.*?)\"\s+(?P<httpResponse>\d+)\s(?P<bytes>\d+)')
