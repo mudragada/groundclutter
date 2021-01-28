@@ -1,14 +1,18 @@
 import math,time
 
-def inputSize():x = input('enter the Problem Size');return int(x)
-def bitArray(probSize): return ([True for i in range(1,probSize+1)])
+def inputSize():
+    x = input('enter the Problem Size')
+    return int(x)
+
+def bitArray(probSize):
+    return ([True for i in range(1,probSize+1)])
 
 ## Define a range with custom Step size
 def my_range(start, end, step):
     while start <= end:
         yield start
         start += step
-        
+
 ## Print Primes by Sieve method
 def printPrimeBySieve(probSize):
     primeArr = bitArray(probSize+1)
@@ -17,11 +21,11 @@ def printPrimeBySieve(probSize):
             print(str(curNum) + " ")
             for multipleOfCurNum in my_range(curNum*curNum, probSize, curNum):
                 primeArr[multipleOfCurNum] = False
-    
+
     for curNum in range (int(math.sqrt(probSize))+1, probSize):
         if(primeArr[curNum]):
             print(str(curNum) + " ")
-        
+
 
 # Print Primes by regular method
 def printPrime(probSize):
