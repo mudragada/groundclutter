@@ -1,5 +1,6 @@
-# Print even fibonacci below a number
-
+"""
+Print even fibonacci below a number
+"""
 
 def sumEvenFibonacci(limit):
 	startNum = 1

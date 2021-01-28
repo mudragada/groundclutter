@@ -1,3 +1,7 @@
+""" 1. Parse log file of a webserver
+    2. Print the filename and number of bytes delivered for 200 responses
+"""
+
 import re
 import sys
 from os import path
@@ -12,7 +16,8 @@ fileDict = dict()
 
 with open(log_file_path, "r") as file:
     for line in file:
-        log_data.append(pattern.match(line).groupdict())
+        pattern_match = pattern.match(line)
+        log_data.append(pattern_match.groupdict())
 
 dedup_log_data = []
 for i in log_data:
@@ -30,7 +35,8 @@ for item in dedup_log_data:
             oldValue = int(fileDict.get(key))
             value = oldValue+value
             fileDict[key] = value
-
+print(fileDict)
+print(dict(sorted(fileDict.items(), key=operator.itemgetter(1))))
 sorted_fileDict = dict(sorted(fileDict.items(), key=operator.itemgetter(1)))
 out_Dict = dict(itertools.islice(sorted_fileDict.items(), 10))
 for k, v in out_Dict.items():

@@ -16,7 +16,5 @@ def main():
             f.write("This is line num: " + str(i) + "\r\n")
         f.close()
 
-
-
 if __name__ == "__main__":
     main()
