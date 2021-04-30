@@ -35,6 +35,8 @@ def printPrime(probSize):
             if(curNum % divisor == 0):isPrime = False; break
         if (isPrime):
             print(str(curNum) + " ")
+
+
 def main():
     problemSize = inputSize()
     ## Time Spent
@@ -47,4 +49,5 @@ def main():
     time_taken_for_regular = time.time() - start_time_regular
     print("---Sieve in %s seconds --- vs --- Regular in %s seconds" % (time_taken_for_sieve,time_taken_for_regular))
 
-main()
+if __name__ == '__main__':
+    main()
