@@ -37,7 +37,7 @@ class Solution(object):
         for pos in range(1, strlen-k+1):
             if(s[pos+k-1] in 'aeiou'):
                 vcount += 1
-            if(s[pos-1] in 'aeiou' and vcount > 0):
+            if(s[pos-1] in 'aeiou'):
                 vcount -= 1
             if(maxcount < vcount):
                 maxcount = vcount
