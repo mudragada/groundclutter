@@ -1,3 +1,6 @@
+"""
+https://www.hackerrank.com/challenges/jumping-on-the-clouds/problem
+"""
 class Solution:
     def jumpingOnClouds(self, c):
         pos = 0

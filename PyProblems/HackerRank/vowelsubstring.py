@@ -1,3 +1,4 @@
+
 import time
 
 class Solution:
@@ -6,7 +7,7 @@ class Solution:
     #  1. STRING s
     #  2. INTEGER k
 
-    def findSubStringSlidingWindow(self, s, k):
+    def maxVowels(self, s, k):
         strlen = len(s)
         vcount = 0
         maxcount = 0
