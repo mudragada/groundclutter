@@ -41,7 +41,6 @@ class Solution:
                 curNum = int(curNum/10)
             if(numDigits%2 == 0 and numDigits > 0):
                 countNumEvenDigits = countNumEvenDigits + 1
-            # print(str(nums[i]) + " has " + str(numDigits))
         return countNumEvenDigits
 
 

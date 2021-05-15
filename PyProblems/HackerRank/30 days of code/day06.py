@@ -45,10 +45,27 @@ Hce akr
 Rn ak
 """
 
-def printEvensAndOdds(testcases, testStr):
+class Solution:
+    def printEvensAndOdds(self, testStrs):
+        for testStr in testStrs:
+            evenStr = ''
+            oddStr = ''
+            for i in range(0, len(testStr)):
+                if(int(i%2)==0):
+                    evenStr = evenStr + testStr[i]
+                else:
+                    oddStr = oddStr + testStr[i]
+            print(str(evenStr) + ' ' + str(oddStr))
 
 
 def main():
-    printEvensAndOdds(10, )
-if __name__ == '__main__':
+    sObj = Solution()
+    t= int(input())
+    testStrs = []
+    for i in range(0,t):
+        testStr= str(input())
+        testStrs.append(testStr)
+    sObj.printEvensAndOdds(testStrs)
+
+if __name__ == "__main__":
     main()
